@@ -161,6 +161,7 @@ export default function App() {
   const [gameOpen, setGameOpen] = useState(false);
 
   const activeChat = chats[activeChatId];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const messages = activeChat?.messages || [];
   const sortedChats = Object.values(chats).sort((a, b) => (b.updatedAt || b.id) - (a.updatedAt || a.id));
 
