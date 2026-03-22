@@ -127,11 +127,9 @@ export default function App() {
   const [confidenceScores, setConfidenceScores] = useState(() => {
     try { return JSON.parse(localStorage.getItem('petbot_confidence') || '{}'); } catch { return {}; }
   });
-
   const [imageLabels, setImageLabels] = useState(() => {
     try { return JSON.parse(localStorage.getItem('petbot_labels') || '{}'); } catch { return {}; }
   });
-
 
   const [chats, setChats] = useState(() => {
     try {
@@ -261,7 +259,6 @@ export default function App() {
       }
     }));
 
-    // unique botMsgId to avoid key collisions
     const botMsgId = Date.now() + Math.floor(Math.random() * 1000) + 100;
 
     try {
@@ -315,7 +312,7 @@ export default function App() {
             setFollowUps(questions);
           }
         } catch (e) { setFollowUps([]); }
-      }, 1000);
+      }, 3000);
 
       // confidence scoring — delayed further
       setTimeout(async () => {
@@ -325,7 +322,7 @@ export default function App() {
             setConfidenceScores(prev => ({ ...prev, [botMsgId]: conf }));
           }
         } catch (e) { }
-      }, 2000);
+      }, 5000);
 
       // image labels
       if (imageBase64) {
@@ -334,7 +331,7 @@ export default function App() {
             const labels = await extractImageLabels(imageBase64);
             setImageLabels(prev => ({ ...prev, [userMsgId]: labels }));
           } catch (e) { }
-        }, 3000);
+        }, 4000);
       }
 
     } catch (err) {
@@ -422,7 +419,6 @@ export default function App() {
       }
     }));
 
-    // unique botMsgId to avoid key collisions
     const botMsgId = Date.now() + Math.floor(Math.random() * 1000) + 100;
 
     try {
@@ -463,7 +459,7 @@ export default function App() {
             setFollowUps(questions);
           }
         } catch (e) { setFollowUps([]); }
-      }, 1000);
+      }, 3000);
 
       // confidence scoring — delayed further
       setTimeout(async () => {
@@ -473,7 +469,7 @@ export default function App() {
             setConfidenceScores(prev => ({ ...prev, [botMsgId]: conf }));
           }
         } catch (e) { }
-      }, 2000);
+      }, 5000);
 
     } catch (err) {
       setChats(prev => ({
