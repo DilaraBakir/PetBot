@@ -354,11 +354,41 @@ export default function App() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPendingImage({ base64: reader.result.split(',')[1], preview: reader.result });
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+      // resize to max 1024px to avoid memory issues
+      const maxSize = 1024;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxSize || height > maxSize) {
+        if (width > height) {
+          height = Math.round((height * maxSize) / width);
+          width = maxSize;
+        } else {
+          width = Math.round((width * maxSize) / height);
+          height = maxSize;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const preview = canvas.toDataURL('image/jpeg', 0.8);
+      const base64 = preview.split(',')[1];
+
+      URL.revokeObjectURL(url);
+      setPendingImage({ base64, preview });
     };
-    reader.readAsDataURL(file);
+
+    img.onerror = () => URL.revokeObjectURL(url);
+    img.src = url;
     e.target.value = '';
   };
 
